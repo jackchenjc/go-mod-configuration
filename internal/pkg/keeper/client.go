@@ -61,6 +61,7 @@ func (k *keeperClient) fullPath(name string) string {
 // IsAlive simply checks if Core Keeper is up and running at the configured URL
 func (k *keeperClient) IsAlive() bool {
 	if _, err := k.commonClient.Ping(context.Background()); err != nil {
+		fmt.Println(err)
 		return false
 	}
 	return true
