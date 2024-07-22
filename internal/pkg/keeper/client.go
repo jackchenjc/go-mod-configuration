@@ -42,6 +42,7 @@ type keeperClient struct {
 
 // NewKeeperClient creates a new Keeper Client.
 func NewKeeperClient(config types.ServiceConfig) *keeperClient {
+	fmt.Println("45: keeper")
 	client := keeperClient{
 		keeperUrl:      config.GetUrl(),
 		configBasePath: config.BasePath,
@@ -168,6 +169,7 @@ func (k *keeperClient) GetConfiguration(configStruct interface{}) (interface{}, 
 }
 
 func (k *keeperClient) WatchForChanges(updateChannel chan<- interface{}, errorChannel chan<- error, configuration interface{}, waitKey string, messageBus messaging.MessageClient) {
+	fmt.Println("172: WatchForChanges")
 	if messageBus == nil {
 		configErr := errors.New("unable to use MessageClient to watch for configuration changes")
 		errorChannel <- configErr
@@ -182,7 +184,7 @@ func (k *keeperClient) WatchForChanges(updateChannel chan<- interface{}, errorCh
 			Messages: messages,
 		},
 	}
-	fmt.Println("185:", topic)
+	fmt.Println("187:", topic)
 
 	watchErrors := make(chan error)
 	err := messageBus.Subscribe(topics, watchErrors)
@@ -210,7 +212,7 @@ func (k *keeperClient) WatchForChanges(updateChannel chan<- interface{}, errorCh
 			case e := <-watchErrors:
 				errorChannel <- e
 			case msgEnvelope := <-messages:
-				fmt.Println("213:", msgEnvelope)
+				fmt.Println("215:", msgEnvelope)
 				if msgEnvelope.ContentType != common.ContentTypeJSON {
 					errorChannel <- fmt.Errorf("invalid content type of configuration changes message, expected: %s, but got: %s", common.ContentTypeJSON, msgEnvelope.ContentType)
 					continue
