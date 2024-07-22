@@ -182,6 +182,7 @@ func (k *keeperClient) WatchForChanges(updateChannel chan<- interface{}, errorCh
 			Messages: messages,
 		},
 	}
+	fmt.Println("185:", topic)
 
 	watchErrors := make(chan error)
 	err := messageBus.Subscribe(topics, watchErrors)
@@ -209,6 +210,7 @@ func (k *keeperClient) WatchForChanges(updateChannel chan<- interface{}, errorCh
 			case e := <-watchErrors:
 				errorChannel <- e
 			case msgEnvelope := <-messages:
+				fmt.Println("213:", msgEnvelope)
 				if msgEnvelope.ContentType != common.ContentTypeJSON {
 					errorChannel <- fmt.Errorf("invalid content type of configuration changes message, expected: %s, but got: %s", common.ContentTypeJSON, msgEnvelope.ContentType)
 					continue
